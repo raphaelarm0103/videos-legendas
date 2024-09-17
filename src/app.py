@@ -31,7 +31,7 @@ def criar_legenda_srt(segments, srt_file):
 
 
 # Passo 3: Adicionar a legenda ao vídeo original com MoviePy
-def embutir_legenda_moviepy(video_input_path, srt_path, output_path):
+def embutir_legenda_moviepy(video_input_path, srt_path, output_path, sync_offset=0.0):
     # Carregar o vídeo original
     video = VideoFileClip(video_input_path)
     # Carregar as legendas do arquivo .srt
@@ -44,12 +44,13 @@ def embutir_legenda_moviepy(video_input_path, srt_path, output_path):
     # Criar clipes de texto para cada legenda
     subtitles_clips = []
     for sub in subs:
-        start_time = srt_to_seconds(sub.start)
-        end_time = srt_to_seconds(sub.end)
+        start_time = max(0, srt_to_seconds(sub.start) + sync_offset)
+        end_time = srt_to_seconds(sub.end) + sync_offset
         # Criar um clipe de texto com a legenda
         txt_clip = TextClip(sub.text, fontsize=80, color='white', size=(video.w - 50, None), method='caption',
-                            align='center')
-        txt_clip = txt_clip.set_position('center', 'bottom').set_start(start_time).set_duration(end_time - start_time)
+                            align='center', bg_color='VioletRed1')
+        txt_clip = txt_clip.set_position(('center', video.h - 100)).set_start(start_time).set_duration(
+            end_time - start_time)
         subtitles_clips.append(txt_clip)
 
     # Combinar o vídeo com os clipes de legendas
@@ -72,7 +73,11 @@ ffmpeg.input(video_input).output(audio_file).run(overwrite_output=True)
 segments = transcrever_audio(audio_file)
 criar_legenda_srt(segments, srt_file)
 
+sync_offset = -0.5  # Por exemplo, -0.5 para adiantar a legenda em 0.5 segundos
+
 # Embutir legenda no vídeo usando MoviePy
 embutir_legenda_moviepy(video_input, srt_file, video_output)
-
+# print(b'\n'.join(TextClip.list('color')).decode())
 print("Legendas adicionadas com sucesso ao vídeo!")
+
+
