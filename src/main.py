@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-from audio_processing import AudioProcessor
-from subtitle_creation import SubtitleCreator
-from video_processing import VideoProcessor
+from src.processa_audio.audio_processing import AudioProcessor
+from src.processa_legenda.subtitle_creation import SubtitleCreator
+from src.cria_video_legenda.video_processing import VideoProcessor
 
 app = Flask(__name__)
 

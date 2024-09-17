@@ -1,6 +1,7 @@
 from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip
-from utils import adjust_fontsize, srt_to_seconds
+from src.utils.utils import adjust_fontsize, srt_to_seconds
 import pysrt
+
 
 class VideoProcessor:
     def embed_subtitles(self, video_input_path, srt_path, output_path, sync_offset=0.0):
@@ -20,7 +21,8 @@ class VideoProcessor:
                 stroke_color='black',
                 stroke_width=2,
                 font='Impact'
-            ).set_position(('center', video.h - int(video.h * 0.1))).set_start(start_time).set_duration(end_time - start_time)
+            ).set_position(('center', video.h - int(video.h * 0.1))).set_start(start_time).set_duration(
+                end_time - start_time)
 
             subtitles_clips.append(txt_clip)
 
