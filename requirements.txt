@@ -7,3 +7,5 @@ pysrt==1.1.2
 flask
 whisper~=1.1.10
 ffmpeg~=1.4
+psycopg2
+sqlalchemy
